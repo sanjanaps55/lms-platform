@@ -1,10 +1,11 @@
+'use client'
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 const navItems=[
     {label:"home",href:"/"},
     {label:"My companion",href:"/companions"},
-    {label:"My journey",href:"my-journey"}
+    {label:"My journey",href:"/my-journey"}
 ]
 const NavItems =()=>{
     const pathname= usePathname();
