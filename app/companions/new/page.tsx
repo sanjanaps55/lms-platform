@@ -1,7 +1,12 @@
 import React from 'react'
 import CompanionForm from '@/components/CompanionForm'
+import {auth} from "@clerk/nextjs/server";
+import {redirect} from "next/navigation";
 
-const NewComapanion = () => {
+const NewCompanion = async ()  => {
+  const { userId } = await auth();
+  
+    if(!userId) redirect('/sign-in');
   return (
     <main>
       <p>Comapnion form</p>
@@ -10,4 +15,4 @@ const NewComapanion = () => {
   )
 }
 
-export default NewComapanion
+export default NewCompanion
