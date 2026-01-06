@@ -12,10 +12,17 @@ const SearchInput = () => {
     const query = searchParams.get('topic') || '';
 
     const [searchQuery, setSearchQuery] = useState('');
+    const [mounted, setMounted] = useState(false);
+
+    // Sync state with URL params after mount to prevent hydration mismatch
+    useEffect(() => {
+        setMounted(true);
+        setSearchQuery(query);
+    }, [query]);
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            if(searchQuery) {
+            if(searchQuery && searchQuery !== query) {
                 const newUrl = formUrlQuery({
                     params: searchParams.toString(),
                     key: "topic",
@@ -23,7 +30,7 @@ const SearchInput = () => {
                 });
 
                 router.push(newUrl, { scroll: false });
-            } else {
+            } else if(!searchQuery && query) {
                 if(pathname === '/companions') {
                     const newUrl = removeKeysFromUrlQuery({
                         params: searchParams.toString(),
@@ -33,8 +40,10 @@ const SearchInput = () => {
                     router.push(newUrl, { scroll: false });
                 }
             }
-        }, 500)
-    }, [searchQuery, router, searchParams, pathname]);
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchQuery, router, searchParams, pathname, query]);
 
     return (
         <div className="relative border border-black rounded-lg items-center flex gap-2 px-2 py-1 h-fit">
@@ -42,8 +51,9 @@ const SearchInput = () => {
             <input
                 placeholder="Search companions..."
                 className="outline-none"
-                value={searchQuery}
+                value={mounted ? searchQuery : ''}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                suppressHydrationWarning
             />
         </div>
     )
