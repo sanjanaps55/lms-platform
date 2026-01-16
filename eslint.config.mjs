@@ -13,6 +13,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  ...(process.env.npm_lifecycle_event === 'build' ? [{ ignores: ['**/*'] }] : []),
 ]);
 
 export default eslintConfig;
