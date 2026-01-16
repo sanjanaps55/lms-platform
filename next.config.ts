@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true
   },
 
+
   images: {
     remotePatterns: [
       { hostname: 'img.clerk.com' }
